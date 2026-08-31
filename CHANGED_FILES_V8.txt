@@ -1,0 +1,52 @@
+ตลาดพระออนไลน์ V8 — รายการไฟล์ที่เปลี่ยนจาก V7
+Generated: 2026-08-03
+
+V7 files: 117
+V8 files before this manifest refresh: 124
+Removed V7 files: 0
+Modified existing files: 29
+Added files: 7
+
+MODIFIED EXISTING FILES
+=======================
+KhaiPhraBan2/android-app/README_ANDROID.md
+KhaiPhraBan2/android-app/app/build.gradle.kts
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/MainActivity.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/model/Models.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/network/ApiService.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/repository/MarketplaceRepository.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/notifications/MarketplaceFirebaseMessagingService.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/notifications/NotificationHelper.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/App.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/components/ListingCard.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/DetailScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/HomeScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MyListingsScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/PremiumScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/viewmodel/AppViewModel.kt
+backend/README_BACKEND.md
+backend/admin/_header.php
+backend/admin/index.php
+backend/admin/listings.php
+backend/admin/login.php
+backend/admin/premium.php
+backend/admin/update_system.php
+backend/admin/users.php
+backend/api/index.php
+backend/database/schema.sql
+backend/includes/bootstrap.php
+backend/includes/db.php
+backend/includes/helpers.php
+backend/share.php
+
+ADDED FILES
+===========
+CHANGED_FILES_V8.txt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/OrderScreens.kt
+KhaiPhraBan2/android-app/app/src/main/res/drawable-nodpi/home_hero_v8.png
+READ_ME_FIRST_V8_TH.txt
+TEST_REPORT_V8.txt
+backend/admin/orders.php
+backend/database/migration_v8.sql
+
+หมายเหตุ: CHANGED_FILES_V8.txt คือ manifest นี้เอง และอาจปรากฏใน Added files จากการเปรียบเทียบครั้งก่อน

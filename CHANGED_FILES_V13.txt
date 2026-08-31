@@ -1,0 +1,33 @@
+ตลาดพระออนไลน์ V13 - รายการไฟล์ที่เปลี่ยนจาก Stable V12 Startup Hotfix
+
+แก้ไฟล์เดิม: 17 ไฟล์
+- KhaiPhraBan2/android-app/README_ANDROID.md
+- KhaiPhraBan2/android-app/app/build.gradle.kts
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/MarketplaceApplication.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/model/Models.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/network/ApiService.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/repository/MarketplaceRepository.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/App.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/AuthScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/DetailScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/PostScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/viewmodel/AppViewModel.kt
+- backend/admin/notifications.php
+- backend/admin/update_system.php
+- backend/api/index.php
+- backend/cron/notifications.php
+- backend/database/schema.sql
+- backend/includes/helpers.php
+
+ไฟล์ใหม่ (ไม่รวมไฟล์รายการนี้): 4 ไฟล์
+- KhaiPhraBan2/android-app/app/release/README_V13_BUILD.txt
+- READ_ME_FIRST_V13_TH.md
+- TEST_REPORT_V13.txt
+- backend/database/migration_v13.sql
+
+ไฟล์ที่ตัดออกจาก source package: 1 ไฟล์
+- KhaiPhraBan2/android-app/app/release/README_V12_BUILD.txt
+
+หมายเหตุ:
+- migration เดิม V3/V5/V6/V7/V8/V9/V10/V11, migration_chat.sql และ migration_announcements.sql ไม่ถูกแก้
+- Android cache/generated output (.gradle/.idea/.kotlin/app/build) จาก V12 ไม่รวมใน V13 ZIP เพื่อป้องกันการใช้ binary/cache เก่าผิดเวอร์ชัน

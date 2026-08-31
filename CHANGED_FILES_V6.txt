@@ -1,0 +1,29 @@
+KhaiPhraBan FIXED V6 — ไฟล์สำคัญที่เพิ่ม/แก้
+
+Backend:
+- includes/helpers.php
+- api/index.php
+- database/schema.sql
+- database/migration_v6.sql
+- admin/_header.php
+- admin/listings.php
+- admin/points.php (ใหม่)
+- admin/premium.php (ใหม่)
+- admin/update_system.php
+
+Android:
+- app/build.gradle.kts
+- data/model/Models.kt
+- data/network/ApiService.kt
+- data/repository/MarketplaceRepository.kt
+- ui/viewmodel/AppViewModel.kt
+- ui/App.kt
+- ui/screens/HomeScreen.kt
+- ui/screens/PremiumScreen.kt (ใหม่)
+- ui/screens/MyListingsScreen.kt
+- ui/screens/DetailScreen.kt
+- ui/components/ListingCard.kt
+
+เอกสาร:
+- READ_ME_FIRST_V6_TH.txt
+- CHANGED_FILES_V6.txt

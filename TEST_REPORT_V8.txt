@@ -1,0 +1,88 @@
+ตลาดพระออนไลน์ V8 — รายงานการตรวจสอบใน Environment นี้
+วันที่ตรวจ: 2026-08-03
+
+ผลตรวจที่ผ่าน
+================
+1) PHP syntax
+- php -l ผ่านทั้งหมด 29 ไฟล์
+- ไม่พบ syntax error
+
+2) ความเข้ากันได้กับ V7 แบบ Static
+- V7 มี 117 ไฟล์
+- V8 ไม่ลบไฟล์เดิมของ V7 แม้แต่ไฟล์เดียว
+- API action เดิม V7: 24 action
+- API action V8: 30 action
+- action เดิมถูกเก็บครบ
+- action ใหม่: create_order, my_orders, order_action, order_detail, purchase_boost, received_orders
+- หน้า Admin เดิม V7 เก็บครบ และเพิ่ม orders.php
+
+3) Kotlin / Android static structural check
+- ตรวจไฟล์ Kotlin 30 ไฟล์
+- วงเล็บ (), [], {} สมดุลทุกไฟล์ หลังตัด string/comment ออกจากการตรวจ
+- ตรวจ resource banner ที่เพิ่มแล้ว
+- versionCode = 6
+- versionName = "V8"
+
+4) Database / Migration static check
+- schema.sql มี boost_settings, listing_boosts, orders อย่างละ 1 definition
+- migration_v8.sql มี object ใหม่อย่างละ 1 definition และมี guard สำหรับ ALTER ที่เพิ่มในตารางเดิม
+- point_transactions รองรับ boost_purchase
+- ไม่บังคับลบฐานข้อมูลเดิม
+
+5) Premium / Boost static flow
+- PDO ตั้ง MySQL session time_zone จาก app timezone (Asia/Bangkok => +07:00)
+- Premium ใช้ MySQL NOW()/DATE_ADD(NOW()) เป็น clock เดียวกับ query ตรวจ active
+- Premium/Boost ใช้ request_key ป้องกัน retry ซ้ำ
+- Android เก็บ request_key เดิมไว้เมื่อ network ล้มเหลว และลบทิ้งหลัง Server ตอบสำเร็จ
+- Server ตรวจว่า request_key เดิมต้องตรง user/listing/plan เดิม
+- จุดหักแต้มและการสร้าง Premium/Boost อยู่ใน DB transaction
+- ใช้ row lock FOR UPDATE กับ listing/wallet
+- Boost เขียน listings.boosted_at จริงและ Home เรียงจากค่าฝั่ง Server
+
+6) Order / Security static flow
+- create_order ล็อก listing ก่อนตรวจ active order
+- buyer_id ใช้จาก token/session
+- seller_id/title/price ใช้จาก listing ฝั่ง Server
+- price_snapshot/title_snapshot ถูกเก็บใน orders
+- order detail ตรวจ participant ที่ Server
+- shipping address ไม่ถูกเพิ่มใน public listing payload
+- seller/buyer action ตรวจ role และสถานะเดิมก่อน transition
+- seller confirm เปลี่ยน listing เป็น sold ใน transaction เดียวกัน
+- Push มี type=order และ order_id สำหรับ deep link
+- Order ใช้ Chat เดิมผ่าน listing/buyer relationship
+- Online count ใช้ app_presence/last_seen เดิม ไม่ใช้ตัวเลขสุ่ม
+
+7) Asset หน้าแรก
+- home_hero_v8.png เป็นไฟล์เดียวกับภาพปกที่ผู้ใช้ส่งมา
+- SHA-256 ตรงกัน
+
+ข้อจำกัดของ Environment นี้
+==========================
+A) Android compile จริงยังทำไม่ได้
+คำสั่งที่ลอง:
+  bash gradlew :app:compileDebugKotlin --no-daemon
+
+ผล:
+- Gradle wrapper พยายามดาวน์โหลด Gradle 8.13
+- Environment นี้ออก Network/DNS ไม่ได้ จึงเกิด java.net.ConnectException / UnresolvedAddressException
+- ไม่มี ANDROID_HOME และ ANDROID_SDK_ROOT
+- ไม่มี system Gradle หรือ kotlinc
+ดังนั้นผล Android เป็น static code/import/structure/resource review ไม่ใช่ APK compile จริง
+
+B) Migration/Runtime MySQL ยัง execute จริงไม่ได้
+- Environment ไม่มี mysql หรือ mariadb client/server
+- จึงตรวจ migration/schema แบบ static เท่านั้น
+- ต้องทดสอบ migration บน staging/backup ของ Server จริงก่อน Production
+
+C) Push Notification end-to-end
+- ไม่มี Firebase credentials/device token/Android device ของระบบ Production ใน Environment นี้
+- ตรวจเส้นทางโค้ดและ payload แล้ว แต่ยังต้องทดสอบรับ Push บนมือถือจริง
+
+D) API end-to-end กับ Production data
+- ไม่เชื่อมต่อฐานข้อมูล Production เพื่อหลีกเลี่ยงการเปลี่ยนข้อมูลจริง
+- ควรทดสอบตาม CHECKLIST ใน READ_ME_FIRST_V8_TH.txt หลัง Deploy Staging
+
+หมายเหตุสำคัญ
+=============
+การตรวจ Static ไม่แทนที่การทดสอบจริงบน Server + MySQL + Android device
+ก่อน Production ให้ Backup V7 DB และไฟล์ทั้งหมด แล้วรัน migration_v8.sql บนสำเนา/Staging ก่อน

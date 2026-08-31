@@ -1,0 +1,27 @@
+ตลาดพระออนไลน์ V10 — ไฟล์ใหม่ (Source)
+==========================================
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/AdminScreens.kt
+  Native Compose Admin: Dashboard/Notifications/Top-up/Verification/Listings/Reports/Orders/Users
+- backend/admin/admin_alerts.php
+  Admin Notification Center บน Web
+- backend/admin/slip_image.php
+  เปิดสลิปเฉพาะ Web Admin หลังตรวจ role
+- backend/api/admin_media.php
+  เปิด Slip/Identity ให้ Native Admin ผ่าน Bearer token + role check
+- backend/database/migration_v10.sql
+  Safe/idempotent V9→V10 migration
+- backend/uploads/slips/.htaccess
+  ปิด direct HTTP access สลิปบน Apache
+- backend/uploads/slips/index.html
+  กัน directory browsing/fallback สำหรับโฟลเดอร์สลิป
+
+เอกสารส่งมอบ V10 ที่เพิ่มใน root ของ Project
+--------------------------------------------
+- CHANGED_FILES_V10.txt
+- NEW_FILES_V10.txt
+- TEST_REPORT_V10.txt
+- READ_ME_FIRST_V10_TH.md
+- V10_IMPLEMENTATION_SUMMARY_TH.md
+- PACKAGE_MANIFEST_V10.txt
+
+หมายเหตุ: เอกสารส่งมอบด้านบนไม่ใช่ runtime source และจึงแยกจากรายการ source ใหม่

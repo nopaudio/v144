@@ -1,0 +1,177 @@
+ตลาดพระออนไลน์ V10 — TEST REPORT
+====================================
+วันที่ตรวจ: 2026-08-04
+ฐานเปรียบเทียบ: V9 Stable ที่แตกจาก ZIP ผู้ใช้
+Working copy: KhaiPhraBan_FIXED_V10_Admin_Mobile_Notifications
+
+ผลที่ตรวจผ่านจริงใน Environment นี้
+--------------------------------------
+1) PHP syntax
+- ตรวจ `php -l` Backend/Admin/API PHP ทั้งหมด 34 ไฟล์
+- PASS: 34/34
+- Syntax error: 0
+
+2) API regression / wiring
+- API case ของ V9 เดิม: 35
+- V10 current cases: 50
+- V9 case ที่หาย: 0
+- Admin API ใหม่: 15
+- Admin API ที่ขาด `require_api_admin($pdo)`: 0
+- Admin API ที่เรียก V10 schema ensure ก่อนตรวจ Admin: 0
+- Member event hook `admin_notification_create()` ไม่เรียก schema DDL: PASS
+- Retrofit action ที่ไม่มี Backend case: 0
+- Repository call ที่ไม่มี ApiService method: 0
+- AppViewModel call ที่ไม่มี Repository method: 0
+
+3) Android static structure
+- Kotlin source ที่ตรวจ delimiter/bracket balance: 33 ไฟล์
+- unmatched delimiter: 0
+- Native Admin routes/models/network/repository/viewmodel wiring ถูกตรวจด้วย static consistency
+- หมายเหตุ: static check ไม่เท่ากับ Kotlin compiler
+
+4) Admin permission/security static audit
+- V9 มี `users.role ENUM('member','admin')` อยู่แล้ว: PASS
+- Web `require_admin()` re-query DB role/status: PASS
+- API `require_api_admin()` ใช้ authenticated API user + DB role: PASS
+- ไม่พบการอ่าน `is_admin` จาก POST/GET/REQUEST: PASS
+- ไม่พบการอ่าน `admin_id` จาก POST/GET/REQUEST เพื่อให้สิทธิ์: PASS
+- ไม่พบการอ่าน `role`/`permission` จาก POST/GET/REQUEST เพื่อให้สิทธิ์: PASS
+- Protected Native media เรียก `require_api_admin`: PASS
+- Protected Web slip เรียก `require_admin`: PASS
+- Wallet API ไม่ส่ง slip_path/slip_url: PASS
+- Apache direct slip access มี `.htaccess` deny: PASS
+- Admin Push query ผู้รับจาก DB `role='admin' AND status='active'`: PASS
+- Server เป็นผู้ใส่ recipient_user_id ใน Admin Push: PASS
+
+5) Notification events
+- topup_submitted: PASS
+- identity_submitted: PASS
+- identity_resubmitted: PASS
+- listing_pending: PASS
+- report_submitted: PASS
+- ไม่สร้าง Order admin task เพราะ V9 ไม่มี Admin-review state: intentional
+
+6) SQL static safety
+- migration_v10.sql ตรวจพบ statement ขึ้นต้น DROP: 0
+- TRUNCATE: 0
+- DELETE FROM: 0
+- RENAME TABLE: 0
+- เพิ่ม column/index/FK ด้วย information_schema guard
+- CREATE TABLE ใช้ IF NOT EXISTS
+- หมายเหตุ: `ON DELETE` ใน FK เป็น referential rule ไม่ใช่ migration delete statement
+
+7) Source preservation
+- V9 original API actions หาย: 0
+- V9 source filesที่ baseline มีแต่หายจาก working copy: 0
+- Architecture ยังคง Android Compose + Retrofit + Repository + AppViewModel + PHP API/Admin เดิม
+
+Android build ที่พยายามรัน
+---------------------------
+คำสั่ง:
+  bash gradlew :app:compileDebugKotlin --no-daemon
+
+ผล:
+  ENVIRONMENT BLOCKED ก่อนถึง Kotlin compiler
+
+สาเหตุจริง:
+- Gradle Wrapper ต้องดาวน์โหลด Gradle 8.13
+- Environment นี้ไม่มี network/DNS สำหรับดาวน์โหลด
+- ~/.gradle ไม่มี Gradle 8.13 distribution cache
+- ไม่มี system `gradle` หรือ `kotlinc` สำรอง
+
+ข้อความหลัก:
+  Downloading Gradle 8.13...
+  java.net.ConnectException
+  Caused by: java.nio.channels.UnresolvedAddressException
+
+ดังนั้น:
+- ห้ามสรุปว่า Android compile ผ่าน
+- ห้ามสรุปว่า Android compile fail เพราะ source
+- สถานะที่ถูกต้องคือ “ยัง compile จริงไม่ได้เพราะ environment”
+
+MySQL runtime
+-------------
+ยัง execute migration กับ MySQL/MariaDB จริงไม่ได้ เพราะ environment นี้ไม่มี
+`mysql` หรือ `mariadb` client/server และไม่ได้เชื่อม Production DB ของผู้ใช้
+
+สิ่งที่ทำแทน:
+- static migration safety/guard check
+- schema/API/table/column consistency check
+- PHP syntax check
+
+FCM runtime
+-----------
+ยังทดสอบ Push end-to-end จริงไม่ได้ เพราะไม่มี Production Firebase service-account/device/network context
+โค้ดเดิมยังใช้ Firebase helper เดิม และ Admin Push แยก type/recipient โดย Server
+
+Mobile/device runtime
+---------------------
+ยังทดสอบ touch/rotation/image picker/notification tap บนอุปกรณ์ Android จริงไม่ได้ใน environment นี้
+
+Test Flow ที่ต้องรันบน Staging/เครื่องจริงหลัง Deploy
+-------------------------------------------------------
+A. Top-up
+[ ] User ส่งสลิป
+[ ] Web/Android Admin Dashboard pending top-up +1
+[ ] Admin Notification unread +1
+[ ] Admin device ได้ Push (ถ้า token/FCM พร้อม)
+[ ] Admin เปิด protected slip
+[ ] Member/non-admin เปิด Admin media API -> 403
+[ ] Admin approve
+[ ] point_wallet balance เพิ่มครั้งเดียว
+[ ] point_transactions มีรายการ topup
+[ ] reviewed_by/reviewed_at ถูกบันทึก
+[ ] pending count ลด
+[ ] task notification ถูก clear จาก unread
+[ ] Premium/Boost ที่ใช้แต้มยังทำงาน
+
+B. Identity
+[ ] User ส่ง Identity
+[ ] pending verification + notification + badge
+[ ] non-admin อ่าน identity media ไม่ได้
+[ ] Admin approve -> reviewed_by/reviewed_at/verified_at
+[ ] User verified badge ขึ้น
+[ ] Admin reject พร้อมเหตุผล
+[ ] User ส่งใหม่หลัง reject -> identity_resubmitted notification ใหม่
+[ ] private storage เดิมยังใช้งาน
+
+C. Listing
+[ ] User ลงประกาศ -> pending
+[ ] Admin dashboard/list notification เพิ่ม
+[ ] Admin approve
+[ ] listings.approved_by/approved_at ถูกบันทึก
+[ ] Listing public เห็นตาม rule เดิม
+[ ] Admin reject ได้
+[ ] Premium/Boost/listing/order protections เดิมยังอยู่
+
+D. Report
+[ ] User report -> open report + Admin notification
+[ ] Admin reviewing/resolve/dismiss
+[ ] resolved_by/resolved_at ถูกบันทึกเมื่อปิดเรื่อง
+[ ] badge/count ลดตามสถานะจริง
+
+E. Permission forging
+[ ] Member token -> /api/index.php?action=admin_dashboard => HTTP 403
+[ ] Member token -> admin_topups/admin_verifications/admin_users => HTTP 403
+[ ] Member token -> /api/admin_media.php => HTTP 403
+[ ] แก้ APK/local DataStore ให้ role=admin หรือ is_admin=true -> ยังไม่ได้สิทธิ์ Server
+[ ] Admin token จริง -> Admin APIs ใช้งานได้
+[ ] Admin ถูกเปลี่ยน role เป็น member/suspended -> Web/API ถูกปฏิเสธเมื่อ request ถัดไป
+
+F. Regression V9
+[ ] Register/Login/Logout
+[ ] Home banner หลายรูป + Home content
+[ ] Listing create/images/approve/detail/share/favorite
+[ ] Chat text/image + unread + User Push
+[ ] Premium
+[ ] Boost
+[ ] Wallet/points/topup
+[ ] Order create/confirm/reject/ship/received + bank snapshot
+[ ] Rating
+[ ] Identity/Verified Bank/Verified Badge
+[ ] Member Profile
+[ ] Reports/Block/Suspend
+[ ] Scheduled Push เดิม
+[ ] Admin desktop
+[ ] Admin mobile (360/390/430 px) ไม่มี table overflow/ไม่ต้อง zoom
+[ ] Modal/รูป Slip/Identity ใช้มือถือได้

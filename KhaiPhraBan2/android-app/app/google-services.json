@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "74906873281",
+    "project_id": "khaiphraban",
+    "storage_bucket": "khaiphraban.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74906873281:android:52aee0ffe7fa63efe11340",
+        "android_client_info": {
+          "package_name": "com.khaiphraban.marketplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDPungCcRqSeuVneF6SadcS8zwhXCnCnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

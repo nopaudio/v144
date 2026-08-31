@@ -1,0 +1,59 @@
+ตลาดพระออนไลน์ V10 — ไฟล์เดิมที่แก้
+=========================================
+ฐาน: V9 Stable ZIP ที่แนบในรอบงานนี้
+หมายเหตุ: รายการนี้เทียบไฟล์ source/config กับ V9 จริง โดยไม่นับ build artifacts (.gradle/build/.idea)
+
+- KhaiPhraBan2/android-app/app/build.gradle.kts
+  เพิ่ม versionCode/versionName เป็น V10 โดยคง dependencies/architecture เดิม
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/MainActivity.kt
+  รองรับ deep-link ภายในแอปจาก Admin Push
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/model/Models.kt
+  เพิ่ม role/Admin badge fields และ Admin API models
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/network/ApiService.kt
+  เพิ่ม Retrofit Admin endpoints + protected admin media
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/repository/MarketplaceRepository.kt
+  ต่อ Admin API เข้ากับ Repository เดิม
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/session/SessionManager.kt
+  เก็บ role ที่ Server ส่งมาเพื่อควบคุม UI เท่านั้น; Server ยังตัดสินสิทธิ์
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/notifications/MarketplaceFirebaseMessagingService.kt
+  แยก admin_task push จาก User/Chat/Order push เดิม
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/notifications/NotificationHelper.kt
+  เพิ่ม Admin notification channel และ safe native route
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/App.kt
+  เพิ่ม Native Admin navigation, unread badge และ refresh role/count
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/ChatScreen.kt
+  แสดง ADMIN badge เมื่อคู่สนทนาเป็น Admin จริงจาก Server
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/DetailScreen.kt
+  แสดง ADMIN badge ข้างชื่อ Seller
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MemberProfileScreen.kt
+  แสดงผู้ดูแลระบบบน Member Profile
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MyListingsScreen.kt
+  แสดง Admin badge/เมนูผู้ดูแลในหน้าของฉัน
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/viewmodel/AppViewModel.kt
+  เพิ่ม state/action สำหรับ Native Admin โดยต่อ Repository เดิม
+- backend/admin/_footer.php
+  เพิ่ม mobile bottom navigation + table-to-card enhancement บนมือถือ
+- backend/admin/_header.php
+  ปรับ Admin theme/layout responsive กลางทุกหน้า + unread badge + mobile menu
+- backend/admin/index.php
+  Dashboard cards จาก Database จริงและ recent Admin notifications
+- backend/admin/listings.php
+  ใช้ shared admin listing approval + audit + mobile status/actions
+- backend/admin/login.php
+  ปรับหน้า Login Admin ให้ mobile friendly และคง DB role authentication เดิม
+- backend/admin/points.php
+  ใช้ shared top-up review + protected slip viewer + mobile status/actions
+- backend/admin/reports.php
+  ใช้ shared report actions + mobile status/actions
+- backend/admin/update_system.php
+  อัปเดตหน้า self-check/install ให้รู้จัก V10 safe schema โดยคง flow V9 เดิม
+- backend/admin/verifications.php
+  ใช้ shared verification review + คง stale-request protection + mobile status/actions
+- backend/api/index.php
+  เพิ่ม Admin API, event hooks, role fields/Admin badge และ chat other_role
+- backend/database/schema.sql
+  อัปเดต fresh schema reference สำหรับ V10 (ห้าม import ทับ Production)
+- backend/includes/firebase_push.php
+  เพิ่ม Server-selected Admin Push โดย reuse push_tokens เดิม
+- backend/includes/helpers.php
+  เพิ่ม V10 safe schema/helper, Admin permission, notification center, shared review logic และ badge payloads

@@ -1,0 +1,74 @@
+ตลาดพระออนไลน์ V14 — TEST REPORT
+วันที่: 2026-08-08
+
+PASS — Backend PHP syntax
+- php -l: 35/35 ไฟล์ผ่าน
+- ไม่มี PHP syntax error
+
+PASS — Android resources
+- XML parse: 9/9 ไฟล์ผ่าน
+
+PASS — API router static check
+- พบ action/case ทั้งหมด 56 actions
+- ไม่พบ case/action ชื่อซ้ำ
+- V14 เพิ่ม lottery_overview และ lottery_buy_number
+
+PASS — Display name Unicode regression check
+ตัวอย่าง old regex -> new regex:
+- พระเครื่อง: 0 -> 1
+- กิตติ์: 0 -> 1
+- ณัฐวุฒิ: 0 -> 1
+- ชื่อ-ไทย_1: 0 -> 1
+- สมชาย 99: 1 -> 1
+- ชื่อ@ไทย: 0 -> 0
+สรุป: สระ/วรรณยุกต์ไทยผ่านใน V14 โดยอักขระนอกชุดที่อนุญาตยังถูกปฏิเสธ
+
+PASS — Migration integrity
+- เทียบ SHA-256 migration เดิมกับ ZIP V13 แล้ว: ไม่พบ migration เก่าถูกแก้
+- migration_v13.sql เดิมคงเดิม
+- migration_v14.sql ไม่มี DROP TABLE / TRUNCATE TABLE / DELETE FROM
+- V14 เพิ่ม schema แบบ additive และ append lottery_purchase ต่อ ENUM เดิม
+
+PASS — Android version static check
+- versionCode = 13
+- versionName = V14.0
+
+PASS — V14 wiring static check
+- ApiService -> Repository -> AppViewModel -> LotteryScreen ถูกเชื่อมต่อ
+- App navigation มี route lottery
+- MyListingsScreen มีปุ่มเข้าหน้าร่วมสนุก
+- Display-name validation รองรับ \p{M} ทั้ง Android และ Backend
+- ข้อความ validation อยู่ภายใน AlertDialog
+- Admin header มีเมนู “ลุ้นพระ”
+- Admin > อัปเดตระบบ แสดง V14 และตรวจ lottery schema
+
+PASS — Lottery safety static review
+- DB UNIQUE(round_id, number): ป้องกันเลขซ้ำต่อรอบ
+- DB UNIQUE(request_key): ป้องกัน request เดิมสร้าง entry ซ้ำ
+- API lock lottery_rounds FOR UPDATE ก่อนขายเลข
+- API lock point_wallets FOR UPDATE ก่อนหักแต้ม
+- หักแต้ม + insert entry + point transaction อยู่ใน DB transaction เดียว
+- idempotent retry ตรวจ request_key ก่อนตรวจสถานะเปิด/ปิด
+- รอบที่ประกาศผลแล้วไม่สามารถประกาศเลขใหม่ทับผลเดิมผ่าน Admin action
+
+NOT RUN — Android Gradle build/assemble
+คำสั่งที่ลอง: ./gradlew --version
+ผล: wrapper พยายาม “Downloading Gradle 8.13...” แล้วล้มเหลวด้วย
+java.net.ConnectException / java.nio.channels.UnresolvedAddressException
+สาเหตุ environment: sandbox ไม่มี network/DNS และไม่มี Android SDK
+หมายเหตุ: gradle-wrapper.properties ของ Stable Base ระบุ Gradle 9.3.1 แต่ wrapper JAR เดิมพิมพ์ว่าจะดาวน์โหลด 8.13;
+จุดนี้มีอยู่ใน V13 เดิมและไม่ได้เปลี่ยนใน V14 เพื่อไม่กระทบ Stable Base
+
+NOT RUN — Live MySQL/MariaDB migration
+- sandbox ไม่มี mysql/mariadb/mysqld
+- ตรวจได้เฉพาะ SQL static safety + PHP schema code
+- ต้องรัน Admin > อัปเดตระบบ V14 บน staging/production ที่สำรอง DB แล้ว
+
+NOT RUN — Live Firebase push
+- ไม่มี production Firebase credentials/network
+- ตรวจ static ว่าใช้ type admin_notification เดิมที่ Android V13 รองรับ
+
+ENVIRONMENT NOTE — PHP mbstring
+- PHP CLI ของ sandbox ไม่มี mbstring
+- ฟังก์ชัน Backend เดิมใช้ mb_* และ production requirements ของโปรเจกต์ต้องมี mbstring
+- regex Unicode ถูกทดสอบโดย preg_match ตรง ๆ และผ่านตามรายการข้างต้น

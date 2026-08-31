@@ -1,0 +1,70 @@
+ตลาดพระออนไลน์ V13 - TEST REPORT
+
+ฐานที่ใช้:
+- V12_STARTUP_HOTFIX (source ล่าสุดใน ZIP ที่ผู้ใช้ส่งมา)
+- Gradle/Startup Hotfix configuration เดิมถูกเก็บไว้
+
+ผลตรวจผ่าน:
+1) PHP syntax
+   - php -l ผ่าน 34/34 ไฟล์
+
+2) Android XML
+   - XML parse ผ่าน 9/9 ไฟล์ใน app/src/main
+
+3) Android source static structure
+   - ตรวจ delimiter/lexical balance ของ Kotlin/KTS ที่แก้: ผ่าน
+   - versionCode = 12
+   - versionName = V13.0
+   - App ยกเลิก V12 local random reminder ด้วย ReminderScheduler.cancelAll()
+   - Chat/Order/Admin task notification code เดิมไม่ถูกแก้
+
+4) API static integration
+   - backend/api/index.php ยังมี 54 actions เท่า V12
+   - ไม่เพิ่ม endpoint ใหม่
+   - register รับ province/amphoe/tambon
+   - my_profile ส่ง province/amphoe/tambon
+   - create_listing ใช้ที่อยู่จากบัญชี และรองรับ legacy V12 แบบบันทึกครั้งเดียว
+
+5) Related listings
+   - หน้า Detail ใช้ HomeData.random/API home เดิม
+   - ตัด listing ปัจจุบันออก และแสดงสูงสุด 6 รายการ
+   - หัวข้อ "เผื่อคุณสนใจ"
+
+6) Database/Migration static
+   - มี backend/database/migration_v13.sql
+   - เป็น additive/idempotent
+   - ไม่มี DROP/TRUNCATE/DELETE data statement
+   - migration เก่า V3-V11/Chat/Announcements hash ตรงกับ Stable Base
+   - V13 เพิ่ม users.province/amphoe/tambon
+   - V13 เพิ่ม scheduled_notifications.source
+   - V13 เพิ่ม member_push_settings
+   - update_system.php แสดง/ตรวจ V13 และเรียก ensure_v13_schema()
+
+7) Push schedule static
+   - Admin ตั้งเปิด/ปิด, 1-6 รอบ/วัน, ช่วงเวลาได้สูงสุด 3 ช่วง
+   - Cron วางแผนเวลาแบบสุ่มในช่วงที่ตั้ง
+   - ใช้ scheduled_notifications + firebase_push_all_active เดิม
+   - auto rows แยกด้วย source=auto_member_v13 เพื่อไม่กระทบ manual schedule
+
+สิ่งที่สภาพแวดล้อมนี้ทดสอบจริงไม่ได้:
+1) Android Gradle compile/build
+   - Gradle wrapper ต้องดาวน์โหลด distribution แต่ sandbox ไม่มี network
+   - local.properties ของ Stable Base ชี้ Android SDK บน Windows และ sandbox ไม่มี Android SDK
+   - จึงไม่สามารถทำ compileDebugKotlin / assembleDebug / APK/AAB จริงได้
+
+2) Database live migration
+   - ไม่มี MySQL/MariaDB server/client และไม่มีการเชื่อม production DB
+   - จึงตรวจ migration แบบ static เท่านั้น ไม่ได้ execute กับข้อมูลจริง
+
+3) Firebase live delivery
+   - ไม่ส่ง Push จริง เพื่อไม่รบกวนสมาชิก production
+   - ตรวจเฉพาะ code path / payload / reuse ระบบเดิม
+
+ก่อนขึ้น production:
+- สำรองฐานข้อมูลตาม workflow เดิม
+- อัปโหลด Backend V13
+- เข้า Admin > อัปเดตระบบ > ตรวจและอัปเดต V13
+- ตรวจ Admin > แจ้งเตือน และตั้งจำนวนรอบ/ช่วงเวลา
+- ตรวจ Cron ทุก 1 นาที
+- Build V13 ใน Android Studio ที่มี Android SDK + network/cache
+- smoke test สมัครใหม่, login บัญชีเดิม, ลงโพสต์, detail related, Push schedule

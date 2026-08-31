@@ -1,0 +1,175 @@
+ตลาดพระออนไลน์ V9 — รายงานการตรวจสอบ
+วันที่ตรวจ: 2026-08-04
+ฐานเปรียบเทียบ: KhaiPhraBan_V8.zip ที่ผู้ใช้แนบในแชท
+
+1) Source/Base Integrity
+========================
+- Extract V8 ต้นฉบับแยกจาก working copy แล้ว compare แบบ SHA-256
+- ไม่มีไฟล์เดิม V8 ถูกลบ
+- backend/config/config.php production file: ไม่ถูกแก้
+- API V8 = 30 actions
+- API V9 = 35 actions
+- Removed action = 0
+- Added actions:
+  my_profile
+  member_profile
+  submit_verification
+  submit_rating
+  chat_unread_count
+
+Admin:
+- หน้า Admin เดิม V8 ไม่มีไฟล์ถูกลบ
+- เพิ่ม verifications.php
+- เพิ่ม identity_document.php
+
+2) PHP Syntax
+=============
+ตรวจด้วย:
+  php -l <ทุกไฟล์ .php ใต้ backend/>
+
+ผล:
+- 31 files
+- 31 ผ่าน
+- 0 syntax errors
+
+3) Regression-sensitive Backend Diff
+====================================
+นำ case เดิม V8 มาเทียบ V9 โดย normalize เฉพาะ ensure_vN_schema($pdo):
+
+logic เดิมเท่ากัน:
+- purchase_premium
+- purchase_boost
+- send_message
+- send_chat_image
+- register_push_token
+- order_action
+
+case เดิมที่เปลี่ยนจริงเพราะ requirement V9:
+- home
+- listing
+- create_order
+- chat_threads
+- chat_messages
+
+helper upload เดิมที่เทียบตรงกับ V8:
+- save_topup_slip = unchanged
+- save_chat_image = unchanged
+- save_listing_images = unchanged
+
+4) Android Static Checks
+========================
+ตรวจ:
+- (), [], {} balance หลังตัด strings/comments
+- import icon ที่ใช้ในไฟล์แก้
+- duplicate top-level Kotlin type
+- ApiService method <-> Repository call
+- Repository method <-> AppViewModel call
+- UI call <-> AppViewModel function
+- Retrofit action <-> PHP API case
+- Navigation route ที่เพิ่ม: verification, member/{userId}
+- search ไม่พบ Kotlin source อ้าง home_hero_v8
+- search ไม่พบ stale coil.compose import
+
+ผล static:
+- delimiter issues = 0
+- duplicate top-level Kotlin type = 0
+- Repository call missing ApiService = 0
+- AppViewModel call missing Repository = 0
+- UI call missing AppViewModel = 0
+- Retrofit action missing Backend case = 0
+
+5) Android Compile Attempt
+==========================
+คำสั่งที่ลอง:
+  bash gradlew :app:compileDebugKotlin --offline --no-daemon --stacktrace
+
+ผล:
+- FAILED ก่อน Kotlin compilation
+- Gradle Wrapper แจ้ง “Downloading Gradle 8.13...”
+- environment ไม่มี network จึงเกิด java.net.ConnectException / UnresolvedAddressException
+- ไม่มี Android SDK ใน common paths ของ environment
+- ไม่มี system gradle/kotlinc
+
+สรุป:
+ห้ามตีความว่า “Android compile ผ่าน”
+ผลที่ยืนยันได้ใน environment นี้คือ Static checks เท่านั้น
+ต้องเปิด Android Studio/CI ที่มี Gradle 8.13 + Android SDK แล้ว Make Project จริงอีกครั้ง
+
+6) Database / SQL Static Checks
+===============================
+migration_v9.sql:
+- ใช้ CREATE TABLE IF NOT EXISTS สำหรับตารางใหม่
+- column/index เดิมใช้ information_schema guard ก่อน ALTER
+- legacy chat backfill ทำเฉพาะเมื่อ read_at ถูกเพิ่มครั้งแรก
+- ไม่มี DROP TABLE
+- ไม่มี TRUNCATE
+- ไม่มี DELETE statement ที่ล้างข้อมูล
+- ON DELETE ใน FOREIGN KEY เป็น referential rule ไม่ใช่ migration delete command
+
+V9 objects:
+- home_content.trust_title
+- home_banners
+- identity_verifications
+- seller_reviews
+- chat_messages.read_at
+- idx_chat_thread_read
+- order seller bank snapshot columns
+
+ข้อจำกัด:
+- environment ไม่มี mysql / mariadb / sqlfluff
+- จึงยังไม่ได้ execute migration บน MySQL runtime
+- ต้องทดสอบบน staging/backup DB ก่อน production
+
+7) Security Review — Identity
+=============================
+- submit_verification ใช้ require_api_user()
+- user_id มาจาก token/current user
+- ไม่มี endpoint public สำหรับ proof
+- proof path ไม่อยู่ใน API payload
+- proof filename random
+- MIME allowlist JPG/PNG/WEBP
+- path allowlist regex + reject ..
+- Admin proof endpoint require_admin()
+- Admin POST approve/reject verify_csrf()
+- Admin review uses $_SESSION['admin_id']
+- stale review guard uses user_id + submitted_at + document_path
+- resubmit sets pending and clears reviewer/reviewed_at/verified_at
+- production supports private_storage_path outside public_html
+- account number not written to application logs by new V9 code
+
+8) Security Review — Order/Rating/Chat
+======================================
+Order:
+- buyer = current token user
+- seller/title/price = listing from Server
+- verified bank = identity_verifications.status='verified' from Server
+- bank snapshot inserted by Server in create_order transaction
+- Android has no seller bank fields in create_order request
+
+Rating:
+- current token user must equal order.buyer_id
+- seller != current user
+- status must completed
+- 1..5 validated Server
+- UNIQUE seller_reviews.order_id
+- transaction + FOR UPDATE on Order prevents concurrent duplicate rating
+
+Chat:
+- unread current user query counts sender_id != current user only
+- room authorization runs before mark-read
+- mark read WHERE sender_id != current user AND read_at IS NULL
+- send_message/send_chat_image/Push case logic retained
+
+9) สิ่งที่ยังต้องทดสอบบนระบบจริง
+================================
+- phpMyAdmin migration_v9.sql บนสำเนา DB V8
+- Permissions ของ private_storage_path
+- Banner upload/write permission
+- Android Gradle compile + APK/AAB
+- Carousel swipe/auto-slide on device
+- Camera/Gallery identity upload
+- Admin proof rendering
+- Full buyer/seller/order/rating flow
+- Chat unread + Push on 2 devices
+- Premium/Boost/Wallet/Topup regression
+- FCM and cron

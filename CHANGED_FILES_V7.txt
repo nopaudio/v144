@@ -1,0 +1,45 @@
+ตลาดพระออนไลน์ V7 — รายการไฟล์ที่เพิ่ม/แก้
+
+ไฟล์ใหม่
+--------
+- READ_ME_FIRST_V7_TH.txt
+- backend/admin/notifications.php
+- backend/admin/reports.php
+- backend/cron/notifications.php
+- backend/database/migration_v7.sql
+- backend/share.php
+
+ไฟล์เดิมที่แก้
+--------------
+- KhaiPhraBan2/android-app/README_ANDROID.md
+- KhaiPhraBan2/android-app/app/build.gradle.kts
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/MainActivity.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/model/Models.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/network/ApiService.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/repository/MarketplaceRepository.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/notifications/MarketplaceFirebaseMessagingService.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/notifications/NotificationHelper.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/notifications/ReminderNotificationWorker.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/App.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/components/ListingCard.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/ChatScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/DetailScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/HomeScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MyListingsScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/PremiumScreen.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/viewmodel/AppViewModel.kt
+- KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/util/UploadUtils.kt
+- KhaiPhraBan2/android-app/app/src/main/res/values/strings.xml
+- backend/README_BACKEND.md
+- backend/admin/_header.php
+- backend/admin/announcements.php
+- backend/admin/login.php
+- backend/admin/points.php
+- backend/admin/premium.php
+- backend/admin/update_system.php
+- backend/api/index.php
+- backend/database/schema.sql
+- backend/includes/firebase_push.php
+- backend/includes/helpers.php
+- backend/privacy-policy.php
+- backend/terms.php

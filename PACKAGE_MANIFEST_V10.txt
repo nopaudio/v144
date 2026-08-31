@@ -1,0 +1,41 @@
+ตลาดพระออนไลน์ V10 — PACKAGE MANIFEST
+========================================
+Generated: 2026-08-04
+Stable base: uploaded V9 project
+Package root: KhaiPhraBan_FIXED_V10_Admin_Mobile_Notifications
+
+Project inventory
+-----------------
+Total files (including V9 build artifacts): 1763
+Total directories: 726
+Uncompressed size: 160.57 MiB
+Source/config/doc files excluding build/.gradle/.idea: 146
+
+Real source roots used
+----------------------
+- Backend/Admin/API/MySQL: backend/
+- Android Compose app: KhaiPhraBan2/android-app/
+- Android Kotlin package: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/
+
+V9 -> V10 source comparison
+---------------------------
+Modified existing source/config files: 27
+New runtime/source files: 7
+Removed baseline source/config files: 0
+Original V9 API cases retained: 35/35
+New Admin API cases: 15
+
+Delivery documents
+------------------
+- READ_ME_FIRST_V10_TH.md
+- V10_IMPLEMENTATION_SUMMARY_TH.md
+- TEST_REPORT_V10.txt
+- CHANGED_FILES_V10.txt
+- NEW_FILES_V10.txt
+
+Important
+---------
+- Production DB migration: backend/database/migration_v10.sql
+- Do not import backend/database/schema.sql over an existing Production DB.
+- Do not overwrite Production backend/config/config.php.
+- Upload backend/uploads/slips/.htaccess (hidden file) on Apache/cPanel.

@@ -1,0 +1,34 @@
+KhaiPhraBan FIXED V5 — ไฟล์สำคัญที่เพิ่ม/แก้
+
+Firebase:
+- android-app/app/google-services.json
+- notifications/MarketplaceFirebaseMessagingService.kt
+- notifications/PushTokenManager.kt
+- backend/includes/firebase_push.php
+
+Android:
+- build.gradle.kts
+- app/build.gradle.kts
+- AndroidManifest.xml
+- MainActivity.kt
+- MarketplaceApplication.kt
+- ui/App.kt
+- ui/screens/DetailScreen.kt
+- ui/screens/ChatScreen.kt
+- ui/viewmodel/AppViewModel.kt
+- data/model/Models.kt
+- data/network/ApiService.kt
+- data/repository/MarketplaceRepository.kt
+- util/UploadUtils.kt
+- notifications/NotificationHelper.kt
+- notifications/ChatNotificationScheduler.kt
+
+Backend:
+- api/index.php
+- includes/bootstrap.php
+- includes/helpers.php
+- includes/firebase_push.php
+- admin/update_system.php
+- database/migration_v5.sql
+- database/migration_chat.sql
+- database/schema.sql

@@ -1,0 +1,42 @@
+ตลาดพระออนไลน์ V14 — รายการไฟล์ที่แก้/เพิ่ม
+
+ไฟล์เดิมที่แก้ 13 ไฟล์
+- MODIFIED: KhaiPhraBan2/android-app/README_ANDROID.md
+- MODIFIED: KhaiPhraBan2/android-app/app/build.gradle.kts
+- MODIFIED: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/model/Models.kt
+- MODIFIED: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/network/ApiService.kt
+- MODIFIED: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/repository/MarketplaceRepository.kt
+- MODIFIED: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/App.kt
+- MODIFIED: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MyListingsScreen.kt
+- MODIFIED: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/viewmodel/AppViewModel.kt
+- MODIFIED: backend/admin/_header.php
+- MODIFIED: backend/admin/update_system.php
+- MODIFIED: backend/api/index.php
+- MODIFIED: backend/database/schema.sql
+- MODIFIED: backend/includes/helpers.php
+
+ไฟล์ระบบใหม่ที่เพิ่ม 4 ไฟล์ (ก่อนเอกสาร V14)
+- ADDED: KhaiPhraBan2/android-app/app/release/README_V14_BUILD.txt
+- ADDED: KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/LotteryScreen.kt
+- ADDED: backend/admin/lottery.php
+- ADDED: backend/database/migration_v14.sql
+
+เอกสาร V14 ที่เพิ่มในขั้นตอนแพ็ก:
+- READ_ME_FIRST_V14_TH.txt
+- CHANGED_FILES_V14.txt
+- TEST_REPORT_V14.txt
+
+ไฟล์เดิมที่ลบ: 0
+
+Migration เดิม:
+- migration_announcements.sql: ไม่แก้
+- migration_chat.sql: ไม่แก้
+- migration_v3.sql: ไม่แก้
+- migration_v5.sql: ไม่แก้
+- migration_v6.sql: ไม่แก้
+- migration_v7.sql: ไม่แก้
+- migration_v8.sql: ไม่แก้
+- migration_v9.sql: ไม่แก้
+- migration_v10.sql: ไม่แก้
+- migration_v11.sql: ไม่แก้
+- migration_v13.sql: ไม่แก้

@@ -1,0 +1,96 @@
+ตลาดพระออนไลน์ V9 — รายการไฟล์ที่เปลี่ยนจาก Stable V8
+Generated: 2026-08-04
+
+Stable V8 files: 1666
+Modified existing files: 19
+Added files: 9
+Removed V8 files: 0
+
+MODIFIED EXISTING FILES
+=======================
+KhaiPhraBan2/android-app/app/build.gradle.kts
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/model/Models.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/network/ApiService.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/repository/MarketplaceRepository.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/App.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/ChatScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/DetailScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/HomeScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MyListingsScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/OrderScreens.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/viewmodel/AppViewModel.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/util/UploadUtils.kt
+backend/admin/_header.php
+backend/admin/home_content.php
+backend/admin/update_system.php
+backend/api/index.php
+backend/config/config.example.php
+backend/database/schema.sql
+backend/includes/helpers.php
+
+ADDED FILES
+===========
+CHANGED_FILES_V9.txt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MemberProfileScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/VerificationScreen.kt
+READ_ME_FIRST_V9_TH.txt
+TEST_REPORT_V9.txt
+backend/admin/identity_document.php
+backend/admin/verifications.php
+backend/database/migration_v9.sql
+backend/uploads/banners/default_home_v8.png
+
+REMOVED FILES
+=============
+ไม่มี
+
+SERVER FILES ที่ต้อง Upload/Update
+==================================
+ด้านล่างเป็น SOURCE PATH ใน ZIP
+ให้นำไฟล์ใต้ backend/ ไปวางทับ [SERVER_BACKEND_ROOT]/ ตาม path หลังคำว่า backend/:
+
+MODIFIED:
+- backend/api/index.php
+- backend/includes/helpers.php
+- backend/admin/_header.php
+- backend/admin/home_content.php
+- backend/admin/update_system.php
+
+NEW:
+- backend/admin/verifications.php
+- backend/admin/identity_document.php
+- backend/database/migration_v9.sql
+- backend/uploads/banners/default_home_v8.png
+
+REFERENCE/FRESH INSTALL:
+- backend/database/schema.sql
+- backend/config/config.example.php
+
+คำเตือน:
+- backend/config/config.php ของ Production ไม่ได้ถูกแก้ในชุดนี้ และไม่ควร overwrite ด้วย config.example.php
+- อย่าลบ uploads/
+- Migration live V8 ให้ใช้ backend/database/migration_v9.sql
+- backend/database/schema.sql ใช้สำหรับ fresh install/reference ไม่ใช่ไฟล์สำหรับ reset DB production
+
+ANDROID FILES ที่แก้/เพิ่ม
+===========================
+KhaiPhraBan2/android-app/app/build.gradle.kts
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/model/Models.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/network/ApiService.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/data/repository/MarketplaceRepository.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/App.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/ChatScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/DetailScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/HomeScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MyListingsScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/OrderScreens.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/viewmodel/AppViewModel.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/util/UploadUtils.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/MemberProfileScreen.kt
+KhaiPhraBan2/android-app/app/src/main/java/com/khaiphraban/marketplace/ui/screens/VerificationScreen.kt
+
+DOCUMENTATION V9
+================
+- READ_ME_FIRST_V9_TH.txt
+- TEST_REPORT_V9.txt
+- CHANGED_FILES_V9.txt
